@@ -1,6 +1,6 @@
 from discord.ext import commands
 import datetime 
-import helper
+from . import helper
 
 class Events(commands.Cog):
 
@@ -11,7 +11,7 @@ class Events(commands.Cog):
     @commands.Cog.listener()
     async def on_ready(self):
         time = (datetime.datetime.utcnow() + datetime.timedelta(hours=5,minutes=30)).strftime("%H:%M:%S")
-        print(f"Started at {time} as {client.user}")
+        print(f"Started at {time} as {self.client.user}")
     
     @commands.Cog.listener()
     async def on_member_join(self,member):

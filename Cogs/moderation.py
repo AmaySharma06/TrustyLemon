@@ -1,6 +1,7 @@
 from discord.ext import commands
 from discord.utils import get
-import helper
+import discord
+from . import helper
 
 class Moderation(commands.Cog):
 
@@ -11,39 +12,36 @@ class Moderation(commands.Cog):
         return ctx.author.guild_permissions.manage_messages
 
     @commands.command()
-    async def kick(self,ctx,member,reason=None):
-        member = helper.check_member(ctx, member)
-        await ctx.send(f"Kicked `{member.user}` from the server")
+    async def kick(self,ctx,member:discord.Member,reason=None):
+        await ctx.send(f"Kicked `{member}` from the server")
         await member.kick(reason=reason)
     
     @commands.command()
-    async def ban(self,ctx,member,reason=None):
-        member = helper.check_member(ctx, member)
-        await ctx.send(f"Banned `{member.user}` from the server")
+    async def ban(self,ctx,member:discord.Member,reason=None):
+        await ctx.send(f"Banned `{member}` from the server")
         await member.ban(reason=reason)
         
     @commands.command()
-    async def mute(self,ctx,member):
-        member = helper.check_member(ctx, member)
+    async def mute(self,ctx,member:discord.Member):
         mute_role = ctx.guild.get_role(helper.Db.get_value("mute"))
-        await member.add_role(mute_role)
-        await ctx.send(f"Muted `{member.user}`")
+        await member.add_roles(mute_role)
+        await ctx.send(f"Muted `{member}`")
     
     @commands.command()
-    async def unmute(self,ctx,member):
-        member = helper.check_member(ctx, member)
+    async def unmute(self,ctx,member:discord.Member):
         mute_role = ctx.guild.get_role(helper.Db.get_value("mute"))
         await member.remove_roles(mute_role)
-        await ctx.send(f"Muted `{member.user}`")
+        await ctx.send(f"Umuted `{member}`")
     
     @commands.command()
-    async def warn(self,ctx,member,*,reason):
-        member = helper.check_member(ctx, member)
+    async def warn(self,ctx,member:discord.Member,*,reason):
         helper.Db.warn_(member, reason)
-        await ctx.send(f"Warned `{member.user}` for {reason}")
+        await ctx.send(f"Warned `{member}` for {reason}")
     
     @commands.command()
-    async def clear(self,ctx,count):
+    async def clear(self,ctx,count:int):
         await ctx.channel.purge(limit=(count+1))
-        await ctx.send(f"Purged {count} messages!",delete_after=5)
+        await ctx.send(f"Purged {count} messages!",delete_after=2.5)
 
+def setup(client):
+    client.add_cog(Moderation(client))
