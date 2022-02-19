@@ -35,7 +35,7 @@ class Events(commands.Cog):
         if message.author.id == 681770687614156811 and message.channel.id == 829651225212354570 and "Achievement" in message.content:
             await self.react(message)
         for word in self.censors:
-            if word in message.content and message.author!=self.client.user and self.client.get_guild(740200656606068766).get_roles(helper.Db.get_value("admin")) not in message.author.roles:
+            if word in message.content.lower() and message.author!=self.client.user and self.client.get_guild(740200656606068766).get_roles(helper.Db.get_value("admin")) not in message.author.roles:
                 await message.delete()
 
     async def react(self,message):

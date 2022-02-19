@@ -84,6 +84,7 @@ class Moderation(commands.Cog):
     
     @censor.command()
     async def add(self,ctx,word:str):
+        word = word.lower()
         censors = helper.Db.get_value("censor")
         if word not in censors:
             censors.append(word)
@@ -95,6 +96,7 @@ class Moderation(commands.Cog):
 
     @censor.command()
     async def remove(self,ctx,word:str):
+        word = word.lower()
         censors = helper.Db.get_value("censor")
         if word in censors:
             censors.remove(word)
