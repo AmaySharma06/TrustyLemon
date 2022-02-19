@@ -32,16 +32,19 @@ class Events(commands.Cog):
 
     @commands.Cog.listener()
     async def on_message(self,message):
-        if message.author.id == 681770687614156811 and message.channel.id == 829651225212354570 and "Achievement" in message.content:
-            await self.react(message)
+        
+        if message.author.id == 681770687614156811 and message.channel.id == 829651225212354570 and message.mentions != []:
+            await self.react(message, [834504209108828211, 858720301692616745, 760066591948800050, 851114544013246474, 858694717210755104])
+        if "bus boi" in message.content.lower() or "bus boy" in message.content.lower():
+            await self.react(message, [853008277037514772,])
         for word in self.censors:
             if word in message.content.lower() and message.author!=self.client.user and self.client.get_guild(740200656606068766).get_role(helper.Db.get_value("admin")) not in message.author.roles:
                 await message.delete()
 
-    async def react(self,message):
-        emojis = [self.client.get_emoji(i) for i in [834504209108828211, 858720301692616745, 760066591948800050, 851114544013246474, 858694717210755104]]
+    async def react(self,message,emojis):
+        emojis = [self.client.get_emoji(i) for i in emojis]
         for i in emojis:
-            await message.add_reaction(i)
+            await message.add_reaction(i) 
     
     # @commands.Cog.listener()
     # async def on_command_error(self, ctx, error):
