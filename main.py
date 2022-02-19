@@ -9,7 +9,9 @@ logging.basicConfig(level=logging.INFO)
 intents = discord.Intents.default()
 intents.members = True
 
-client = commands.Bot(command_prefix=helper.Db.get_value("prefix"),intents=intents)
+def get_prefix(bot,message):
+    return helper.Db.get_value("prefix")
+client = commands.Bot(command_prefix=get_prefix,intents=intents)
 
 extensions = [
     file.split(".")[0] for file in os.listdir("./Cogs") if file.endswith(".py") and file[:-3] not in ("helper","__init__")

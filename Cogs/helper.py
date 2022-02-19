@@ -44,7 +44,6 @@ class Db:
     
     @classmethod
     def warn_(cls,member,reason):
-        print(member)
         warns = cls.get_value("warns")
         try:
             field = warns[str(member.id)]
@@ -52,10 +51,37 @@ class Db:
             field = cls.empty_warn_field
         field["count"] += 1
         field["warnings"].append(reason)
-        field["timestamps"].append(time.time())
+        field["timestamps"].append(str(round(time.time())))
         warns[str(member.id)] = field
         cls.set_value("warns", warns)
 
+    @classmethod
+    def unwarn_(cls,member,timestamp=None):
+        warns = cls.get_value("warns")
+        try:
+            field = warns[str(member.id)]
+        except KeyError:                                       
+            return
+            print("Hmm1")
+        if timestamp:
+            id = None
+            for i,j in enumerate(field["timestamps"]):
+                if str(j) == timestamp:
+                    id = i
+                    break
+            else:
+                return
+                print("Hmm2")
+            field["count"] -= 1
+            field["warnings"].remove(field["warnings"][id])
+            field["timestamps"].remove(timestamp)
+            if not field["count"]:
+                warns.pop(str(member.id),None)
+            else: warns[str(member.id)] = field
+        else: 
+            warns.pop(str(member.id),None)
+
+        cls.set_value("warns", warns)
 
 # def check_member(ctx,member):
 #     if isinstance(member, discord.Member):
