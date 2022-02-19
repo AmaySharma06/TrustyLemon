@@ -3,6 +3,7 @@ from discord.ext import commands
 import logging
 import os
 import Cogs.helper as helper
+from keep_alive import keep_alive
 
 logging.basicConfig(level=logging.INFO)
 
@@ -20,7 +21,11 @@ extensions = [
 for file in extensions:
     client.load_extension("Cogs."+file)
 
-with open("token.txt","r") as f:
-    token = f.readline()
-
+token = os.environ.get("token")
+if not token:
+    with open("token.txt","r") as f:
+        token = f.readline()
+        client.run(token)
+      
+keep_alive()
 client.run(token)
