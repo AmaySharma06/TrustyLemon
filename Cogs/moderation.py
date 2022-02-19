@@ -56,8 +56,8 @@ class Moderation(commands.Cog):
                 break
         else: await ctx.send("Member has no warnings issued ||yet||"); return
 
-        warnings = fields["warnings"]
-        timestamps = fields["timestamps"]
+        warnings = field["warnings"]
+        timestamps = field["timestamps"]
 
         strings = ""
         for i in range(len(warnings)):
@@ -69,6 +69,7 @@ class Moderation(commands.Cog):
             description = strings
         )
         embed.set_footer(text="To remove a warning, use clw `mention` `timestamp`")
+        embed.set_thumbnail(member.default_avatar_url)
 
         await ctx.send(embed=embed) 
 
